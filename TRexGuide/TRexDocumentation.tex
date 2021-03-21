@@ -1,0 +1,232 @@
+%!TEX spellcheck = en_US
+%!TEX spellcheck = LaTeX
+\documentclass[conference, english, letterpaper, onecolumn, draft]{IEEEtran}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{standalone}
+\usepackage[cmex10]{amsmath}
+\usepackage[mathscr]{eucal}
+\usepackage{%
+	amssymb,%
+	bbm,%
+	breqn,%
+	cite,%
+	color,%
+	epstopdf,%
+	graphicx,%
+	ifthen,%
+	stackengine,%
+	pgf,%
+	pgfplots,%
+	tikz,%
+	url,%
+}
+%% depending on your installation, you may wish to adjust the top margin:
+\addtolength{\topmargin}{9mm}
+\pgfplotsset{width=3.25in}
+\pgfplotsset{every axis plot/.append style={very thick}}
+
+\interdisplaylinepenalty=2500
+
+
+\usepgflibrary{shapes}
+\usetikzlibrary{%
+  	arrows,%
+  	backgrounds,%
+  	calc,%
+	fit,%
+	shadows,%
+	shapes,%
+}
+
+\graphicspath{{Figures/}}
+
+%%%%%%
+%% Packages:
+%% Some useful packages (and compatibility issues with the IEEE format)
+%% are pointed out at the very end of this template source file (they are 
+%% taken verbatim out of bare_conf.tex by Michael Shell).
+%
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+%
+
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{result}{Result}
+\newtheorem{problem}{Problem}
+\newtheorem{objective}{Objective}
+\newtheorem{question}{Question}
+\newtheorem{answer}{Answer}
+
+\newcommand{\proof}{{\it Proof: }}
+\newcommand{\qed}{\hfill $\square$}
+
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\cP}{\mathcal{P}}
+
+\newcommand{\sX}{\mathscr{X}}
+
+\newcommand{\ack}{\mathrm{ack}}
+\newcommand{\nack}{\mathrm{nack}}
+\newcommand{\rd}{\mathrm{d}}
+
+\newcommand{\EQ}[1]{\begin{equation*}#1\end{equation*}}
+\newcommand{\EQN}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\eq}[1]{\begin{align*}#1\end{align*}}
+\newcommand{\eqn}[1]{\begin{align}#1\end{align}}
+\newcommand{\meq}[2]{\begin{xalignat*}{#1}#2\end{xalignat*}}
+\newcommand{\meqn}[2]{\begin{xalignat}{#1}#2\end{xalignat}}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\expect}[1]{\mathbb{E}\left[{#1}\right]}
+\newcommand{\prob}[1]{\mathbb{P}\left[{#1}\right]}
+\newcommand{\given}{\; \big\vert \;} 
+\newcommand{\set}[1]{\left\{#1\right\}} 
+\newcommand{\SetIn}[1]{\mathbbm{1}_{\set{#1}}} 
+
+\DeclareMathOperator{\Var}{Var}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+\title{Documentation for TRex}
+
+\author{
+  \IEEEauthorblockN{Bidhov Bizar}
+  \IEEEauthorblockA{Indian Institute of Science
+                    Bengaluru, India\\
+                    \texttt{bidhovbizar@iisc.ac.in}}
+}
+
+\maketitle
+
+\begin{abstract}
+\textbf{The following contain the documentation for TReX from Cisco. TRex is a packet generator which works on DPDK.}
+\end{abstract}
+\section{Materials}
+\begin{enumerate}
+\item Manual: 
+
+https://trex-tgn.cisco.com/trex/doc/trex_vm_manual.html
+
+Note that the links in the page in 1 do not have https:// as a prefix which will give you connection timed out error.
+Please add the prefix to avoid seeing the Problem Loading page.
+
+\item Book: 
+
+https://trex-tgn.cisco.com/trex/doc/trex_book.pdf
+
+\item Tutorial is available at:
+
+CISCO LIVE: https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2017/pdf/DEVNET-2568.pdf
+
+Random Guy: https://tawmio.com/2019/07/08/trex-ciscos-stateful-stateless-traffic-generator/
+
+\item Sample router configuration tutorial is available at
+
+https://trex-tgn.cisco.com/trex/doc/trex_config_guide.html
+
+\item Github repo for GUI:
+
+stateful: 	https://github.com/exalt-tech/trex-stateful-gui/blob/features/bassam/infrastructure/README.md
+
+stateless: 	https://github.com/cisco-system-traffic-generator/trex-stateless-gui
+
+\item Installation:
+
+https://github.com/cisco-system-traffic-generator/trex-core
+
+https://github.com/cisco-system-traffic-generator/trex-core/wiki
+
+\item Faq:
+
+https://trex-tgn.cisco.com/trex/doc/trex_faq.html
+
+\end{enumerate}
+
+\section{How to Install and run TRex}
+\begin{enumerate}
+\item Download ubuntu20.0 server (without the GUI) and install it in your Oracle Virtual Box
+\item The screen resolution will be low for the CLI so install virtual box Ubuntu guest utilities by running the below command
+
+\begin{verbatim}
+sudo apt-get install virtualbox-guest-utils 
+virtualbox-guest-x11 virtualbox-guest-dkms
+\end{verbatim}
+
+You will be able to see Display settings when you press right click on the screen to change the screen resolution or you could also go to Oracle Dialogue box and View $\rightarrow$ Virtual Screen 1 $\rightarrow$ 1024 $\times$ 768
+
+\item Remember gnome-terminal won't be available so none of the applications that you can see in the GUI will of any use. So press 
+
+\begin{verbatim}
+CTL+ALT+F3 
+\end{verbatim}
+
+to shift to CLI mode and run
+
+\begin{verbatim}
+sudo apt install gnome-terminal
+\end{verbatim}
+
+\item Press 
+
+\begin{verbatim}
+CTL+ALT+F2 
+\end{verbatim}
+
+to revert back to GUI and press 
+
+\begin{verbatim}
+CTL+ALT+T 
+\end{verbatim}
+
+to start a terminal. 
+
+\item Use the following link to explore TRex
+
+https://trex-tgn.cisco.com/trex/doc/trex_vm_manual.html
+
+\item Go to virtualbox $\rightarrow$ settings $\rightarrow$ network
+change NAT to bridged adapter (I kept Qualcomm)
+
+\item The T-rex gui given in the documentation doesn't work. 
+If we google T-rex gui we will obtain t-rex-stateless-gui which can only work in stateless mode. So run the following command 
+
+\begin{verbatim}
+sudo docker run --rm -it --privileged --cap-add=ALL -p 4500:4500 -p 4501:4501 -p 4507:4507 trexcisco/trex
+\end{verbatim}
+
+within the interactive bash run the stateless version without the  configuration file which ensures t-rex to run stateless
+
+\begin{verbatim}
+sudo ./t-rex-64 -i 
+\end{verbatim}
+
+\item Go to the T-rex-stateless-gui and connect to the ip address of the virtualbox which can be pinged.
+ 
+This can be found by 'ifconfig'
+\end{enumerate}
+\label{pagecount}
+\end{document}

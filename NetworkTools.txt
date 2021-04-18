@@ -1,0 +1,71 @@
+Network Tools To Remember:
+
+https://unix.stackexchange.com/questions/120153/resolving-mac-address-from-ip-address-in-linux
+
+Mac Address Finder : https://aruljohn.com/mac.pl
+
+1. ifconfig 
+	shows the interfaces and their ip address, mac address, broadcast and other details.
+	
+2. ifconfig enp0s8 192.168.56.10 netmask 255.255.255.0 up
+	Set your IP Address of adapter enp0s8 to 192.168.56.10 and mask 24 bit and up the adapter
+
+	
+3. ip address show
+	Similar to ifconfig but just ip address (L3 Details)
+	
+4. ip link show
+	Similar to ifconfig but just mac address (L2 Details)
+	
+5. ip link set enp0s8 down
+   ip link set enp0s8 up
+   
+   
+	Bring down the adapter interface enp0s8 down and then up.
+	To see the status of the down link run "ip link show" 
+	
+6. ip route
+	Gives you the ip address and mac address of the devices in your network
+
+7. ip neigh
+	 Same as ip address show
+	 
+8. ip route show
+	Gives the route 
+	
+9. nslookup google.com
+	Helps you to resolve the webaddress to ip address using the DNS service provided at IP address mentioned in /etc/resolv.conf
+	
+10. dig
+
+11. vim /etc/resolv.conf
+	Helps you open file with the address of different nameserver that provide us DNS service
+	add -> nameserver 8.8.8.8 (google nameserver)
+	add -> nameserver 8.8.4.4 (google nameserver)
+
+12. ping 192.168.56.6 -c 1
+	Send one ICMP packets to the device with ip address mention 
+	
+	
+13. fping -s -g 192.168.56.1 192.168.56.101
+	Ping IP address from 56.1 to 56.101 
+	alternate names: fping / fing
+
+14. arp -a 
+
+15. arping -I <interface> -c 1 <host> 
+	arping -I eth0 -c1 192.168.1.2
+	
+16. tcpdump -D
+	Give you the devices that can be listened to your devices
+	
+	tcpdump -i enp0s8
+	Give you the packets arriving at the adapter device enp0s8
+	
+17. nmap -P0 -O 192.168.56.5
+	 Free security scanner which gives the following result
+	 1. OS running on the IP
+	 2. MAC address of the device
+	 3. open ports available running which services
+	 4. Next hop
+	 

@@ -149,7 +149,7 @@ port_info:
 	 default_gw: 192.168.56.5
 
 Return to step 6 to see the packets
-
+						Method I
 8. Use the following command to run the TRex with a specified packet profile
 
 sudo ./t-rex-64 -f cap2/dns.yaml -d 10
@@ -157,5 +157,29 @@ sudo ./t-rex-64 -f cap2/dns.yaml -d 10
 This will use template in dns.yaml file to run the TRex server for 10 seconds
 
 Look at the tcpdump screens at step 6. to see output 
+						
+						METHOD II (Ref: https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2017/pdf/DEVNET-2568.pdf)
+8. Launch TRex Server 
+sudo ./t-rex-64 -i 
 
+Switch to second terminal and launch TRex console
+sudo trex-console
+
+Use the following commands to see the src and dst IP and mac ID (This way we know whether TRex is configured in L2(mac) or L3(IP) mode)
+trex> portattr
+
+
+To change the sender address or move from L2 to L3
+	a. Enter service mode
+		trex> service
+	b. Configure port 0 and 1 with source address 192.168.56.6 and 56.7(doesnt matter 1.1.1.1 would work) and destination address 192.168.56.3 and 192.168.56.5
+	
+	trex(service)> l3 -p 0 --src 192.168.56.6 --dst 192.168.56.3
+	trex(service)> l3 -p 1 --src 192.168.56.7 --dst 192.168.56.5
+	
+	c. Sent arp to check connectivity and response.
+	
+	trex(service)> arp
+	
+	d.
 8. We need to figure out how to do TCP communication using TRex as all the rest is UDP communication. The server and host is set. 

@@ -69,3 +69,35 @@ Mac Address Finder : https://aruljohn.com/mac.pl
 	 3. open ports available running which services
 	 4. Next hop
 	 
+18. netstat -ltnp | grep ':6653'
+	 -l : tells nestat to only show listening sockets
+	 -t tells to display tcp connection
+	 -n instructs it show numerical address
+	 -p show process ID and process names
+	 
+	install netstat using the following
+	sudo apt install net-tools #install net-tools
+	
+How to add second extra network interface on Ubuntu 18.04 VM on OpenStack
+https://askubuntu.com/questions/1167839/how-to-add-second-extra-network-interface-on-ubuntu-18-04-vm-on-openstack
+
+How to Add an Additional IP to Your Ubuntu 18.04 Server
+https://www.atlantic.net/vps-hosting/how-to-add-an-additional-ip-to-your-ubuntu-18-04-server/
+
+Google: can you add more than 1 ip address to different network same interface??
+
+Answers
+https://www.quora.com/Can-we-have-two-different-IP-address-for-single-interface-at-a-time
+https://www.quora.com/Can-a-single-network-interface-have-more-than-one-IP-address-associated-with-it
+https://www.quora.com/Can-a-computer-have-two-IP-addresses
+https://www.loadtestingtool.com/help/how-setup-ip.shtml
+https://serverfault.com/questions/312221/can-a-single-network-card-have-2-ip-addresses
+https://access.redhat.com/solutions/30564
+
+
+Preetams Helps
+Introduction to Linux interfaces for virtual networking
+https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking/
+
+Linux VETH Pair - Virtual Ethernet Pair
+https://www.youtube.com/watch?v=FUHyWfRNhTk

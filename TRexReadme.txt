@@ -19,18 +19,24 @@ Materials
 	CISCO LIVE: https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2017/pdf/DEVNET-2568.pdf   | page 19
   	Random Guy: https://tawmio.com/2019/07/08/trex-ciscos-stateful-stateless-traffic-generator/
 	
-7. Sample router configuration tutorial is available at
+7. TRex advanced statefull Documentation
+	https://trex-tgn.cisco.com/trex/doc/trex_astf.html#_client_server_only_mode
+	
+8. Comparing TRex Advanced Stateful performance to Linux NGINX
+	https://trex-tgn.cisco.com/trex/doc/trex_astf_vs_nginx.html#_setup_trex_vs_trex
+	
+9. Sample router configuration tutorial is available at
 	https://trex-tgn.cisco.com/trex/doc/trex_config_guide.html
 	
-8. Github repo for GUI
+10. Github repo for GUI
 	stateful: 	https://github.com/exalt-tech/trex-stateful-gui/blob/features/bassam/infrastructure/README.md
 	stateless: 	https://github.com/cisco-system-traffic-generator/trex-stateless-gui
 
-9. Installation from GitHub:
+11. Installation from GitHub:
 	https://github.com/cisco-system-traffic-generator/trex-core
 	https://github.com/cisco-system-traffic-generator/trex-core/wiki
 	
-10. Faq:
+12. Faq:
 	https://trex-tgn.cisco.com/trex/doc/trex_faq.html
 	
 How To Install and run TRex

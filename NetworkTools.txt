@@ -5,79 +5,276 @@ https://unix.stackexchange.com/questions/120153/resolving-mac-address-from-ip-ad
 Mac Address Finder : https://aruljohn.com/mac.pl
 
 1. ifconfig 
-	shows the interfaces and their ip address, mac address, broadcast and other details.
-	
-2. ifconfig enp0s8 192.168.56.10 netmask 255.255.255.0 up
-	Set your IP Address of adapter enp0s8 to 192.168.56.10 and mask 24 bit and up the adapter
+	shows interfaces that are up and their ip address, mac address, broadcast and other details.
 
+2. ifconfig enp0s8 192.168.56.10 netmask 255.255.255.0 up
+	Add IP Address for adapter enp0s8 to 192.168.56.10 and mask 24 bit and up the adapter
+
+3. ip a
+   ip ad
+   ip address
+   ip address show
+   Shows the ip address and other links which are either up or down with their L2/L3 details
+   
+4. ip address add 192.168.56.10/24 dev enp0s8
+	Add a new ip address to your device enp0s8
+
+5. ip link 
+   ip link show
+	Similar to ip a but shows the status of the devices
 	
-3. ip address show
-	Similar to ifconfig but just ip address (L3 Details)
-	
-4. ip link show
-	Similar to ifconfig but just mac address (L2 Details)
-	
-5. ip link set enp0s8 down
+6. ip link set enp0s8 down
    ip link set enp0s8 up
    
-   
 	Bring down the adapter interface enp0s8 down and then up.
-	To see the status of the down link run "ip link show" 
-	
-6. ip route
-	Gives you the ip address and mac address of the devices in your network
+	To see the status of the down link run "ip link" see the <...,UP,...>
 
-7. ip neigh
-	 Same as ip address show
-	 
-8. ip route show
-	Gives the route 
+7. ip route
+	CAUTION: Make sure there is no double entry otherwise no connectivity OR destination out of reach
+	Gives you the ip address, gateway of the devices in your network
+
+8. route 
+	CAUTION: Make sure there is no double entry otherwise no connectivity OR destination out of reach
+	Gives you the same information of ip route but tabular
 	
-9. nslookup google.com
+9. ip route add default via 192.168.1.1 dev enp0s8
+	Set the device enp0s8 use 192.168.1.1 as its default gateway
+
+10. ip route add 10.0.0.0/24 via 0.0.0.0 dev veth0-d 
+	Creates the entry at the following table in route
+	Destination 	Gateway 	Genmask 		Flags Metric Ref Use Iface
+	10.0.0.0 		0.0.0.0		255.255.255.0	UG     100    0   0  veth0-d
+	
+11. ip route del 10.0.0.0/32
+	Deletes 1st entry from the following table in route
+	Destination 	Gateway 	Genmask 		Flags Metric Ref Use Iface
+	10.0.0.0 		0.0.0.0		255.255.255.255	UG     100    0   0  veth0-d
+	10.0.0.0 		0.0.0.0		255.255.255.0	UG     100    0   0  veth0-d
+	
+12. route del -net 10.0.0.0 gw 0.0.0.0 netmask 255.255.255.0 dev veth0-d  
+	Deletes 1st entry from the following table in route
+	Destination 	Gateway 	Genmask 		Flags Metric Ref Use Iface
+	10.0.0.0 		0.0.0.0		255.255.255.0 	UG     100    0   0  veth0-d
+	10.0.0.0 		0.0.0.0		255.255.255.0 	UG     100    0   0  veth1-d
+	
+13. ip neigh
+	 Same as ip address show
+	
+14. nslookup google.com
 	Helps you to resolve the webaddress to ip address using the DNS service provided at IP address mentioned in /etc/resolv.conf
 	
-10. dig
+15. dig
 
-11. vim /etc/resolv.conf
+16. vim /etc/resolv.conf
 	Helps you open file with the address of different nameserver that provide us DNS service
 	add -> nameserver 8.8.8.8 (google nameserver)
 	add -> nameserver 8.8.4.4 (google nameserver)
 
-12. ping 192.168.56.6 -c 1
+17. ping 192.168.56.6 -c 1
 	Send one ICMP packets to the device with ip address mention 
 	
+18. ping -I enp0s8 192.168.56.6
+	Send ICMP packet from network device enp0s8 to ip address 56.6
 	
-13. fping -s -g 192.168.56.1 192.168.56.101
+19. fping -s -g 192.168.56.1 192.168.56.101
 	Ping IP address from 56.1 to 56.101 
 	alternate names: fping / fing
 
-14. arp -a 
+20. arp -a 
 
-15. arping -I <interface> -c 1 <host> 
+21. arping -I <interface> -c 1 <host> 
 	arping -I eth0 -c1 192.168.1.2
 	
-16. tcpdump -D
+22. tcpdump -D
 	Give you the devices that can be listened to your devices
 	
 	tcpdump -i enp0s8
 	Give you the packets arriving at the adapter device enp0s8
 	
-17. nmap -P0 -O 192.168.56.5
+23. nmap -P0 -O 192.168.56.5
 	 Free security scanner which gives the following result
 	 1. OS running on the IP
 	 2. MAC address of the device
 	 3. open ports available running which services
 	 4. Next hop
 	 
-18. netstat -ltnp | grep ':6653'
+24. netstat -ltnp | grep ':6653'
 	 -l : tells nestat to only show listening sockets
 	 -t tells to display tcp connection
 	 -n instructs it show numerical address
 	 -p show process ID and process names
 	 
-	install netstat using the following
-	sudo apt install net-tools #install net-tools
+	Install netstat using the following
+	sudo apt install net-tools 
+
+25. sudo fuser -k 6653/tcp
+	 Kill the process which is using port 6653 and is TCP
 	
+I) How to create Network NamespaceLinux VETH Pair - Virtual Ethernet Pair
+
+ip link 	# Shows existing network device configuration
+
+ip link add tap1 type veth peer name tap2  #add 2 network devices connected in form of a pipe with tap1 
+										at beginning and device type veth(virtual ethernet) and end tap2
+
+ip netns add red 			# Create a network namespace(netns) red
+ip netns add blue			# Create a network namespace(netns) blue
+
+ip link set tap1 netns red	#shift tap1 to netns red
+ip link set tap2 netns blue #shift tap2 to netns blue
+
+ip netns exec red ip a 	#See the network devices within netns red and observe the device state is down
+ip netns exec red ip link set tap1 up 	#We set the device state of tap1 to be UP
+
+ip netns exec blue ip a	#See the network devices within netns blue and observe the device state of tap2 is down.
+ip netns exec blue ip link set tap2 up	#We set the device state of tap2 to be UP
+
+ip netns exec red ifconfig tap1 192.168.1.2/24 	#Set the ip address of tap1 in netns red to be 1.2/24
+ip netns exec blue ifconfig tap2 192.168.1.3/24	#Set the ip address of tap2 in netns blue to be 1.3/24
+
+ip netns exec red ping 192.168.1.3		#Try to ping to the netns blue using tap1 
+ip netns exec blue ping 192.168.1.2		#Try to ping to the netns red using tap2
+
+				SHORTCUT
+				# ip netns add net1
+				# ip netns add net2
+				# ip link add veth1 netns net1 type veth peer name veth2 netns net2
+				
+II) How to create a mininet network with vSwitch
+			(h1)--(s1)--(h2)
+https://www.youtube.com/watch?v=_WgUwUf1d34&t=29s
+ip link			#observe the link
+ip a 			#observe the address of links
+ip route		#observe the route for links
+
+ip netns add red		#Create new network namespace red
+ip netns add green		#Create new network namespace green
+
+ip netns exec red ip link # {ip netns exec red} runs the command {ip link} in ns red
+ip netns exec green ip link # {ip netns exec green} runs the command {ip link} in ns green
+
+ovs-vsctl add-br OVS1 	#We need a openVSwitch in root namespace to talk to red and green with name OVS1
+ovs-vsctl show 			#Shows the details of the OpenVSwitch and newly added port
+
+
+#Use veth pipe to connect network ns red and vSwitch and green and vSwitch
+ip link add eth0-r type veth peer name veth-r	#Create pipe with eth0-r and veth-r at both end
+ip link set eth0-r netns red 				#Put eth0-r in ns red
+ip link 									#We see that root ns doesnt have eth0-r
+ip netns exec red ip link 					#We see that red ns contain eth0-r	
+
+ovs-vsctl show 					#See the switch characteristics
+ovs-vsctl add-port OVS1 veth-r 	#Adds veth-r to vSwitch OVS1
+ovs-vsctl show 					#See the added port to vSwitch
+#red and vSwitch connected 
+
+ip link add eth-g type veth peer name veth-g 	#Create pipe with eth0-g and veth-g at both end
+ip link set eth0-g netns green				#Put eth0-g in ns red
+ovs-vsctl add-port OVS1 veth-g				#Adds veth-g to vSwitch OVS1
+
+ip link  						#We see that root ns doesnt have eth0-g
+ip netns exec green ip link  	#We see that green ns contain eth0-g
+ovs-vsctl show 					#See the added port to vSwitch
+#green and vSwitch connected
+
+Bringing the interfaces UP and Assigning IP Addresses 
+#root namespace
+ip link 				#See that veth-r and veth-g STATE is DOWN
+						#veth-r@ <BROADCAST, MULTICAST> is seen 
+ip link set veth-r up 	#Set the veth-r interface up
+ip link 				#See that eth0-r and eth-g STATE is LOWERLAYERDOWN
+						#veth-r@ <NO-CARRIER, BROADCAST, MULTICAST, UP> is seen. 
+
+#red namespace
+ip netns exec red ip link set lo up 				#Bring up the loopback interface in netns red
+ip netns exec red ip link set eth0-r up 			#Bring up the eth-r interface in netns red 
+
+ip netns exec red ip address add 10.0.0.1/24 dev eth0-r #Assign the IP address to eth0-r
+ip netns exec red ip route 	#See that now we have a device for ip address 10.0.0.0/24 via eth0-r
+							#10.0.0.0/24 dev eth0-r proto kernel scope link src 10.0.0.1
+							#Shows that there exist a path
+							
+ip route 	# See that root netns has no clue of 10.0.0.0/24
+
+#green namespace
+ip link set veth-g up 	#		Set the veth-g interface up
+#Shortcut
+ip netns exec green bash 		#Removes the need of typing ip netns exec green everytime
+ip link set lo up 				#set the loopback device up
+ip link set eth0-g up 			#Set the eth-g device up
+ip address add 10.0.0.2/24 dev eth0-g  #Add network address 10.0.0.2/24 on device eth0-g
+exit 							#Comes out of netns green
+
+ip netns exec red ping 10.0.0.2 #See ping from green replying
+
+III) How to run local DHCP to give ip address to a device in a network namespace using vlan tag for process isolation.
+
+#Run commands in II) to get a (Red)--(Router)--(Green) setup
+								(h1)--(s1)--(h2)
+ovs-vsctl set port veth-r tag=100 	#Namespace red has green are 
+ovs-vsctl set port veth-g tag=200	#separated at the switch by vlan
+ovs-vsctl show 			#See that interface have tag: added to it
+
+ip netns exec red ping 10.0.0.2  #Packets wont cross the switch because of vlan tag
+
+#remove ip address of eth0-r and eth0-g since we will be using dhcp instead 
+ip netns exec red ip address delete 10.0.0.1/24 dev eth0-r
+ip netns exec green ip address delete 10.0.0.2/24 dev eth0-g
+
+ip netns add dhcp-r			#to run DCHP server on netns for red tenents
+ip netns add dhcp-g			#to run DCHP server on netns for red tenents
+
+#connection of ns dhcp-r and dhcp-g to the switch will be done using internal port tap-r and tap-g and not veth pair
+ovs-vsctl add-port OVS1 tap-r 			#You may seem error stating "Could not open network device"
+ovs-vsctl show 							#The error is because it doesn't identify the use of the port
+ovs-vsctl set interface tap-r type=internal #The error will be removed after it knows its internal port
+ovs-vsctl show 							#No error in tap-r section
+ovs-vsctl set port tap-r tag=100		#Set the vlan tag for tap-r to be 100
+
+ovs-vsctl add-port OVS1 tap-g
+ovs-vsctl set interface tap-g type=internal
+ovs-vsctl set port tap-g tag=200
+ovs-vsctl show
+
+#Move the tap-r and tap-g to their netns dhcp-r and dhcp-g
+ip link set tap-r netns dhcp-r		#Moves tap-r to netns dhcp-r
+ip link set tap-g netns dhcp-g
+ip netns exec dhcp-r ip link 		# Shows that tap-r is here
+
+#move into netns dhcp-r to up the devices
+ip 
+ip netns exec dhcp-r bash 		#start bash in netns dhcp-r
+ip link set lo up				#Up the loopbach device
+ip link set tap-r up			#Up the tap-r device
+ip address add 10.50.50.2/24 dev tap-r #Add IP address to the dhcp-r port 
+exit
+
+#move into netns dhcp-g to up the devices
+ip netns exec dhcp-g bash
+ip link set lo up
+ip link set tap-g up
+ip address add 10.50.50.2/24 dev tap-g #Add IP address to the dhcp-g port 
+
+#Run a DNS server on dhcp-r netns to give address to any tenants
+ip netns exec dhcp-r dnsmasq --interface=tap-r \			#Run dnsmasq in the dhcp-r netns on tap-r 
+--dhcp-range=10.50.50.10,10.50.50.100,255.255.255.0  		#interface in the range of 50.10 to 50.100
+
+ip netns exec dhcp-g dnsmasq --interface=tap-g \			#Run dnsmasq in the dhcp-g netns on tap-g 
+--dhcp-range=10.50.50.10,10.50.50.100,255.255.255.0  		#interface in the range of 50.10 to 50.100
+
+#To check which process is running on which network nameserver
+ps -ef | grep dnsmasq 			#Obtain the PID for the dnsmasq with UID nobody
+ip netns identify <pid of dnsmasq> #We see dnsmasq in tap-r is in dhcp-r
+ip netns exec dhcp-r ip address 	 
+
+ip netns exec red ip address 		#Shows there is still no address for eth0-r
+
+ip netns exec red dhclient eth0-r	#Assigns ip address to the adapter eth0-r
+ip netns exec red ip a 				#Find the IP address here
+
+ip netns exec green dhclient eth0-g #Assigns ip address to the adapter eth0-g
+ip netns exec green ip a 			#Find the IP address here
+
 How to add second extra network interface on Ubuntu 18.04 VM on OpenStack
 https://askubuntu.com/questions/1167839/how-to-add-second-extra-network-interface-on-ubuntu-18-04-vm-on-openstack
 

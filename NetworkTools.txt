@@ -23,82 +23,87 @@ Mac Address Finder : https://aruljohn.com/mac.pl
    ip link show
 	Similar to ip a but shows the status of the devices
 	
-6. ip link set enp0s8 down
+6. ip link set enp0s8 netns 1
+	This will set the netns of the link to root namespace
+   ip link set enp0s9 netns red
+	This will set the netns of the link to red namespace
+	
+7. ip link set enp0s8 down
    ip link set enp0s8 up
    
 	Bring down the adapter interface enp0s8 down and then up.
 	To see the status of the down link run "ip link" see the <...,UP,...>
 
-7. ip route
+8. ip route
 	CAUTION: Make sure there is no double entry otherwise no connectivity OR destination out of reach
 	Gives you the ip address, gateway of the devices in your network
 
-8. route 
+9. route 
 	CAUTION: Make sure there is no double entry otherwise no connectivity OR destination out of reach
 	Gives you the same information of ip route but tabular
 	
-9. ip route add default via 192.168.1.1 dev enp0s8
+10. ip route add default via 192.168.1.1 dev enp0s8
 	Set the device enp0s8 use 192.168.1.1 as its default gateway
 
-10. ip route add 10.0.0.0/24 via 0.0.0.0 dev veth0-d 
+11. ip route add 10.0.0.0/24 via 0.0.0.0 dev veth0-d 
 	Creates the entry at the following table in route
 	Destination 	Gateway 	Genmask 		Flags Metric Ref Use Iface
 	10.0.0.0 		0.0.0.0		255.255.255.0	UG     100    0   0  veth0-d
 	
-11. ip route del 10.0.0.0/32
+12. ip route del 10.0.0.0/32
 	Deletes 1st entry from the following table in route
 	Destination 	Gateway 	Genmask 		Flags Metric Ref Use Iface
 	10.0.0.0 		0.0.0.0		255.255.255.255	UG     100    0   0  veth0-d
 	10.0.0.0 		0.0.0.0		255.255.255.0	UG     100    0   0  veth0-d
 	
-12. route del -net 10.0.0.0 gw 0.0.0.0 netmask 255.255.255.0 dev veth0-d  
+13. route del -net 10.0.0.0 gw 0.0.0.0 netmask 255.255.255.0 dev veth0-d  
 	Deletes 1st entry from the following table in route
 	Destination 	Gateway 	Genmask 		Flags Metric Ref Use Iface
 	10.0.0.0 		0.0.0.0		255.255.255.0 	UG     100    0   0  veth0-d
 	10.0.0.0 		0.0.0.0		255.255.255.0 	UG     100    0   0  veth1-d
 	
-13. ip neigh
+14. ip neigh
 	 Same as ip address show
 	
-14. nslookup google.com
+15. nslookup google.com
 	Helps you to resolve the webaddress to ip address using the DNS service provided at IP address mentioned in /etc/resolv.conf
 	
-15. dig
+16. dig
 
-16. vim /etc/resolv.conf
+17. vim /etc/resolv.conf
 	Helps you open file with the address of different nameserver that provide us DNS service
 	add -> nameserver 8.8.8.8 (google nameserver)
 	add -> nameserver 8.8.4.4 (google nameserver)
 
-17. ping 192.168.56.6 -c 1
+18. ping 192.168.56.6 -c 1
 	Send one ICMP packets to the device with ip address mention 
 	
-18. ping -I enp0s8 192.168.56.6
+19. ping -I enp0s8 192.168.56.6
 	Send ICMP packet from network device enp0s8 to ip address 56.6
 	
-19. fping -s -g 192.168.56.1 192.168.56.101
+20. fping -s -g 192.168.56.1 192.168.56.101
 	Ping IP address from 56.1 to 56.101 
 	alternate names: fping / fing
 
-20. arp -a 
+21. arp -a 
 
-21. arping -I <interface> -c 1 <host> 
+22. arping -I <interface> -c 1 <host> 
 	arping -I eth0 -c1 192.168.1.2
 	
-22. tcpdump -D
+23. tcpdump -D
 	Give you the devices that can be listened to your devices
 	
 	tcpdump -i enp0s8
 	Give you the packets arriving at the adapter device enp0s8
 	
-23. nmap -P0 -O 192.168.56.5
+24. nmap -P0 -O 192.168.56.5
 	 Free security scanner which gives the following result
 	 1. OS running on the IP
 	 2. MAC address of the device
 	 3. open ports available running which services
 	 4. Next hop
 	 
-24. netstat -ltnp | grep ':6653'
+25. netstat -ltnp | grep ':6653'
 	 -l : tells nestat to only show listening sockets
 	 -t tells to display tcp connection
 	 -n instructs it show numerical address
@@ -107,7 +112,7 @@ Mac Address Finder : https://aruljohn.com/mac.pl
 	Install netstat using the following
 	sudo apt install net-tools 
 
-25. sudo fuser -k 6653/tcp
+26. sudo fuser -k 6653/tcp
 	 Kill the process which is using port 6653 and is TCP
 	
 I) How to create Network NamespaceLinux VETH Pair - Virtual Ethernet Pair
@@ -135,11 +140,15 @@ ip netns exec blue ifconfig tap2 192.168.1.3/24	#Set the ip address of tap2 in n
 ip netns exec red ping 192.168.1.3		#Try to ping to the netns blue using tap1 
 ip netns exec blue ping 192.168.1.2		#Try to ping to the netns red using tap2
 
+NB: This ping works for the following reason
+1. the "ip route" entry for both of the will have an entry which will have dev that are end of pipes (tap1,tap2).
+2. If there are multiple pipes connecting 2 netns then make sure there is just one entry for one netns to another.
+
 				SHORTCUT
 				# ip netns add net1
 				# ip netns add net2
 				# ip link add veth1 netns net1 type veth peer name veth2 netns net2
-				
+	
 II) How to create a mininet network with vSwitch
 			(h1)--(s1)--(h2)
 https://www.youtube.com/watch?v=_WgUwUf1d34&t=29s

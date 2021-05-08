@@ -38,6 +38,9 @@ Materials
 	
 12. Faq:
 	https://trex-tgn.cisco.com/trex/doc/trex_faq.html
+
+13. Statless GUI Help				   
+	https://learningnetwork.cisco.com/s/question/0D53i00000U2p7sCAB/using-the-trex-stateless-gui-with-the-trex-node-in-cmlp-2
 	
 How To Install and run TRex
 1. Download ubuntu20.0 server (without the gui) and install it in your Oracle Virtual Box
@@ -190,5 +193,44 @@ To change the sender address or move from L2 to L3
 	
 	trex(service)> arp
 	
-	d.
+	d. service --off
+	
+	e. start -f cap2/dns.yaml 
+		Do this for mimicing tcp communication i.e. server client communication. Packets will be sent in the following template
+		16.0.0.1 -> 48.0.0.1
+		48.0.0.1 -> 16.0.0.1
+		
+					OR
+	   start -f stl/udp_1pkt.py
+		Do this for mimicing UDP communication. Packets will be sent in the following template
+		16.0.0.1 -> 48.0.0.1
+		16.0.0.1 -> 48.0.0.1
+		
 8. We need to figure out how to do TCP communication using TRex as all the rest is UDP communication. The server and host is set. 
+
+-------------------------------------------------------------------------
+==========L2/L3 Configuration: Network Namespace with veth pair on Single Machine ===================
+1. Create a network namespace (netns) called DUT
+2. Create 2 veth pair named veth0-d<-->eth0-d and veth1-d<-->eth1-d. Shift eth0-d and eth1-d to netns DUT named
+3. Do the basic chore of adding IP address UP the links and lo.
+3. Run TRex in root namespace with interfaces as [veth0-d, veth1-d] in /etc/trex_cfg.yaml with mac address of the device in netns DUT as destination and source as mac address of interface veth0-d and veth1-d.
+4. Run tcpdump in DUT on eth0-d and eth1-d
+5. Run portattr in trex console and see the arp resolution. 
+
+NB: arp resolution had some trouble. L3 configuration didn't resolve properly.
+	Check the following
+	1. ip route	
+	See that device connected to port 0 is the device at the route in root network namespace and DUT netns
+	2. /etc/trex_cfg.yaml is not set in low_footprint mode
+	3. TRex is in promiscous mode
+	4. There is a dpdk driver problem that creates arp issue. Need more investigation
+	
+6. If the resolution doesn't give you the mac address of the DUT then manually enter the values assuming port 0 has arp missing
+	service 
+	l2 -p 0 --dst aa:bb:cc:dd:ee
+	service --off
+7. To run stateless UDP packets 
+	start -f stl/udp_1pkt.py -d 5
+	
+	NB: stateful tcp packets like cap2/dns.yaml wont work while running /t-rex-64 -i 
+		Run TRex separately in non interactive mode sudo ./t-rex-64 -f cap2/dns.yaml -d 5

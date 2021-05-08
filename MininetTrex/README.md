@@ -6,6 +6,7 @@
 
 ## General Topology
 The following the documentation for running 2 TRex and 2 host in the following topology: 
+```
                   (Trex1)
 		     |
 	             |
@@ -13,7 +14,7 @@ The following the documentation for running 2 TRex and 2 host in the following t
 		     |
 		     |
 		   (h2)
-
+```
 ## Pre requisites
 This experiment assumes you have 2 instances of TRex running in 
 `$ /opt/trex1/v2.89` 

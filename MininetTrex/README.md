@@ -2,7 +2,7 @@
 * [General Topology](#general-topology)
 * [Pre Requisites](#pre-requisites)
 * [Running Trex in Mininet](#running-trex-in-mininet)
-* [Explanation] (#explanation)
+* [Explanation](#explanation)
 
 ## General Topology
 The following the documentation for running 2 TRex and 2 host in the following topology: 

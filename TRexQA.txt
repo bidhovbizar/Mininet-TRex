@@ -1,0 +1,89 @@
+TRex QA
+1. Can we work with just single interface TRex with centos and change configuration file accordingly
+	Use veth pair as one of the interface(s) and start TRex.
+	If you manage to start the TRex server succesfully "./t-rex-64 -i" and manage to connect to the server using the console "./trex-console" then we can run "portattr" to see in which mode trex is in.
+	Use "l2 -p0 --dst 00:00:00:00:00:00" to set the destination address of port 0/1 and verify the change in "portattr"
+	Start the file transfer in Trex using "trex> start -p 0 -f stl/udp_1pkt.py -d 10" to use just one of the port and sent the packets to its corresponding receiver
+	
+2. In linux network namespace using veth pair "ip route" do not identify 2 interfaces to the same network namespace to TRex? What should we do to create individual entry to the namespace?
+	Do not connect 2 namespace to each other directly by shifting both the end points of the veth to the DUT namespace which would make the network to chose only one interface to be active (as entered in ip route) which also means any packets which is sent to that namespace will only chose one among the 2 pair and because of that the TRex arp resolution may not work or even if it work the MAC address of the receiver will be same as the interface. So connect the veth pair to switch and let the switch take care of finding individual exit. Otherwise the packets sent by Port 0 and Port 1 will be received by just one interface.
+	
+3. Even using bridge in between 2 netns the packets sent from TRex is received only at one interface at the DUT in L3 mode.Why?
+	In L3 mode the MAC address is found by ARP which causes the problem. Even without TRex, if you do arp you will find the mac address received from 2 interfaces from the DUT will be same even though they are assigned 2 different mac address and link level. Receiving the wrong MAC address can only be set straight by manually assigning the right MAC address using "l2 -p 1 --dst aa:bb:cc:dd:ee:ff".
+	Discussion on this is at 
+	https://serverfault.com/questions/247472/arp-replies-contain-wrong-mac-address
+	
+4. How to connect TRex with Mininet
+	While mininet creates it topology it create the ovs bridge in the root namespace and hosts in different network namespace. So create 2 veth pair in roo tnamespace and add it to the switch. Run TRex using the other end of newly created veth pair interfaces with the destination ip/ mac address of the hosts in mininet. You can see the connectivity from the rootnamespace by pinging to hosts after you connect the 2 veth interfaces by "ping 10.0.0.1". 
+	
+5. How to run multiple instances of TRex
+	You have to change the configuration file for both the trex instances as
+	vim /etc/trex_cfg1.yaml
+	paste 
+	- port_limit: 2
+	  version: 2
+	  interfaces: ['veth0', 'veth1']  <--- different ports
+	  prefix: instance1                   <--- unique prefix
+	  zmq_pub_port: 4600                  <--- unique ZMQ publisher port
+	  zmq_rpc_port: 4601                  <--- unique ZMQ RPC port
+	  
+	 vim /etc/trex_cfg2.yaml
+	 - port_limit: 2
+	  version: 2
+	  interfaces: ['veth2', 'veth3']  <--- different ports
+	  prefix: instance2                   <--- unique prefix
+	  zmq_pub_port: 4610                  <--- unique ZMQ publisher port
+	  zmq_rpc_port: 4611                  <--- unique ZMQ RPC port
+	  
+	Run TRex server using the following commands
+	 trex1/v2.89/t-rex-64 --cfg /etc/trex_cfg1.yaml
+	 trex2/v2.89/t-rex-64 --cfg /etc/trex_cfg2.yaml
+	
+	And connect to the TRex server using the following commands
+	 TRex Instance1
+	 trex1/v2.89/trex-console -p 4601
+	 TRex Instance2
+	 trex2/v2.89/trex-console -p 4611
+	 
+	refer 1.2.4 of FAQ
+	https://trex-tgn.cisco.com/trex/doc/trex_faq.html
+	
+6. What are some frequently used commands in TRex?
+	portattr                                                    -> gives basic infom
+	service 													-> enables service mode to setup source and dstination
+	l3 -p 0 --src 10.0.0.10 --dst 10.0.0.2 						-> Under service mode we can set L3 address
+	l2 -p1 --dst 00:00:00:00:00:00								-> Under service mode we can assign L2 dst address.
+	arp 														-> Looks for mac address on the dst address given in l3
+	service --off												-> Turn of the service mode to run the below code
+	start -f stl/udp_1pkt.py -d 5								-> Runs packets according to file specifies
+	
+7. Is it necessary to have 2 ports veth0 and veth1? or veth2 and veth3 in the configuration file? 
+	No we can replace one of the interface with dummy and still the statless udp packet transmission will work
+	
+
+==========================TRex and Mininet====================================
+8. In normal condition when a host do not have trex running we usually receive packet on the h1-eth0 or hi-eth0 for some i. So tcpdump -nli h1-eth0 would give us the arriving packets. But on a host where TRex is installed it do not show packets received at this port. What changed? How to find which port is receiving it?
+	If a host has multiple interface connected to the switch (here 's1'), it will only chose one to receive and transmit. In our case where Trex is installed in a host there will be one or two veth port connected to the switch 's1' for TRex purpose and h1-eth0 that came with Mininet topology.  So using "trex> portattr" command figure out what is the mac address the destination ip provides using arp. Which will be resolved automatically. Check in your host "$: ip link" to see which device matches the mac address. Now run tcpdump -nli on that. An example answer is 
+	"tcpdump -nli veth2"
+9. Can I turn on the TRex server and console simultaneously in a script?
+	It wont work as it takes for the TRex server to become active so a delay of 2 to 5 seconds is recommended
+	
+10. While connecting veth pair to TRex will the connectivity go from the switch 's1' to which all the hosts are connected?
+	Yes, if any one of the link is not set to be "up" then the whole OpenVSwitch controlled by ovs-vsctl is broken and all the pings will fail. So irrespective of the namespace ensure you split the algorithm to set the newly created link up after connecting to the switch 's1' in our case.
+	
+11. Is there a way to save the mininet topology when the os switches off?
+	No, its better to automate setting up the mininet environment. Use the following github repo to have a 3 host 1 switch topology.
+	                  (Trex1)
+						|
+						|
+		  (h1,Trex2)--(s1)--(h3)
+						|
+						|
+					  (h2)
+	https://github.com/bidhovbizar/TRex/tree/main/MininetTrex
+
+12. Does mininet python API helps to run commands on xterm within a bash file which is run on  files such as subprocess.call("setupH1MininetPart2.sh",shell=True)
+	No, it suppress those commands for some reasons I don't understand. An example of such instance is line 35,36,37 and 38 on setupH1MininetPart2.sh contains xterm command which are ignored but the same command when run in runMininet.py on line 34,37 and 39. It runs fine.
+	
+	Similarly the sleep function is also not ran in bash scrip using subprocess.call("file.sh", shell=True)
+	

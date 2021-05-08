@@ -4,13 +4,8 @@
 #          |
 # (h1) -- (s1) -- (h2)
 #
-
-# Create a mininet topology with 2 host
-#fuser -k 6653/tcp
-#sudo mn -c
-#sudo mn 
-
 #Connect 2 veth pair to switch s1 in mininet
+echo "cleaning connection in rootnamespace"
 ip link delete veth0 
 ip link delete veth1
 ovs-vsctl del-port s1 eth0
@@ -19,3 +14,4 @@ ip link
 echo ""
 ovs-vsctl show
 echo "Cleanup successfull"
+echo ""

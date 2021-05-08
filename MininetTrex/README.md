@@ -19,20 +19,20 @@ The following the documentation for running 2 TRex and 2 host in the following t
 This experiment assumes you have 2 instances of TRex running in 
 `$ /opt/trex1/v2.89` 
 and 
-`$ /opt/trex2/v2.289` 
+`$ /opt/trex2/v2.289`. 
 
 This also assumes you have 2 trex configuration file as used to start them using --cfg tag while running TRex server 
 `$ /etc/trex_cfg1.yaml` 
 and 
-`$ /etc/trex_cfg2.yaml`
+`$ /etc/trex_cfg2.yaml`.
 
-if you dont have it then do the following to copy the files to your /etc/ or use --cfg to redirect to the location of the configuration file
+If you dont have it then do the following to copy the files to your /etc/ or use --cfg to redirect to the location of the configuration file.
 ```
 $ cp cfg/trex_cfg1.yaml /etc/
 $ cp cfg/trex_cfg2.yaml /etc/
 ```
 
-To start copy all the bash files (*.sh) and python files (*.py) into /opt/ and run the following
+To start copy all the bash files (*.sh) and python files (*.py) into /opt/ and run the following:
 ```
 $ sudo -i
 $ cd /opt/
@@ -40,10 +40,12 @@ $ chmod u+x /opt/*.sh
 $ chmod u+x /opt/*.py
 ```
 
-Output for ls command should be the following after installation of 2 trex instance and extracting all the codes
-`$ :/opt/# ls`
+Output for ls command should be the following after installation of 2 trex instance and extracting all the codes:
+```
+$ :/opt/# ls
 cfg   cleanupH1Mininet.sh  cleanup.sh  cleanupTrexMininet.sh  readme.txt  runMininet.py  runTrexMininet.sh  setupH1MininetPart1.sh  setupH1MininetPart2.sh  setupTrexH1Link.sh  setupTrexMininet.sh
 trex1 trex2
+```
 
 ## Running Trex in Mininet
 To start the experiment just run the following code in sudo or sudo -i
@@ -60,7 +62,7 @@ $ ./runTrexMininet.sh
 ```
 
 ## Explanation
-The following is the sequence of running files and the sequence to run this is important
+The following is the sequence of running files and the sequence to run this is important.
 
 `$ ./runTrexMininet.sh`
 	This file contains code to start the mininet topology and then cleanup the mininet topology

@@ -49,8 +49,12 @@ trex1 trex2
 
 ## Running Trex in Mininet
 To start the experiment just run the following code in sudo or sudo -i
-This bash script contains the sequence of starting Mininet topology configuring TRex in host1 and connecting TRex to the swtich s1 from root namespace and finally cleaning up the whole setup.
+This bash script contains the sequence of starting Mininet topology configuring TRex in host1, configuring TRex in root namespace and connecting both TRex to the swtich s1 from root namespace and host1. Then finally cleaning up the whole setup.
 `$ ./runTrexMininet.sh`
+
+CAVEAT: YOU MAY HAVE TO START AND CLOSE THE SCRIPT TWICE.WHY?
+Why?1: When you run this it may not start the first time because of a clashing usage of port 6653 by another controller. The script will auto clean. So run it again to start the setup successfully.
+Why?2: When you start the setup for the first time, due to configuring the dpdk ports the servers may take more time than usual. Hence the sleep time given for the trex-console wont suffice. So exit all the process and start again.
 
 if you dont have permission follow this code
 ```

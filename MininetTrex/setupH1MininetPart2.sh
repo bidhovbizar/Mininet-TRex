@@ -32,9 +32,9 @@ ovs-vsctl show
 echo ""
 cd ./trex2/v2.89/
 ##Run the Trex Server in on xterm and Trex console/client in another console
-xterm -T "h1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i &
-sleep 10
-xterm -hold -T "h1 Client/console" -e ./trex-console -f -s 10.0.0.1 -p 4611
-sleep 3
+#xterm -T "h1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i &
+#sleep 10
+#xterm -hold -T "h1 Client/console" -e ./trex-console -f -s 10.0.0.1 -p 4611
+#sleep 3
 echo
 #echo "The TRex2 will be deleted when Mininet closes"

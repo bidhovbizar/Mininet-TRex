@@ -103,18 +103,57 @@ Mac Address Finder : https://aruljohn.com/mac.pl
 	 3. open ports available running which services
 	 4. Next hop
 	 
-25. netstat -ltnp | grep ':6653'
+25. netstat -tulpn | grep ':6653'
 	 -l : tells nestat to only show listening sockets
 	 -t tells to display tcp connection
 	 -n instructs it show numerical address
 	 -p show process ID and process names
-	 
+	 -u udp connection
 	Install netstat using the following
 	sudo apt install net-tools 
 
+26. ss --all 
+	 Shows the state of All ports. Listening or not listening
+
+	ss -l
+	 Show the port that are Listening.
+	 
+	ss -ta 
+	 Shows All the port that are using Tcp
+	 
+	ss -lu
+	 Shows the port that are Listening and using Udp.
+	 
+	ss -p
+	 Shows the Process id with the port number
+	
+	ss --inet -nap	
+	 
+	Mix as per wish example "ltp"
+	
 26. sudo fuser -k 6653/tcp
 	 Kill the process which is using port 6653 and is TCP
+	 
+27. ethtool -S veth1
+	 S: statistics
+	 i: interface show details
+	 
+	 If you have a veth pair veth1 <-> eth1 then you can trace where the other veth pair is given you have one.
+	 This command will give you peer_ifindex as some number. Use ip link to find that index in different netns or docker.
+	 Eg:
+	 ethtool -S veth1
+		peer_ifindex: 4
+	 
+	 ip link
+		 1. lo
+		 2. enp0s3
+		 3. veth1
+		 4. eth1
+		So from this we can understand eth1 is the peer of veth1
 	
+	Note: The ifindex of devices can be seen using the following:
+		cat /sys/class/net/enp0s3/ifindex
+		
 I) How to create Network NamespaceLinux VETH Pair - Virtual Ethernet Pair
 
 ip link 	# Shows existing network device configuration
@@ -149,6 +188,7 @@ NB: This ping works for the following reason
 				# ip netns add net2
 				# ip link add veth1 netns net1 type veth peer name veth2 netns net2
 	
+
 II) How to create a mininet network with vSwitch
 			(h1)--(s1)--(h2)
 https://www.youtube.com/watch?v=_WgUwUf1d34&t=29s
@@ -284,26 +324,61 @@ ip netns exec red ip a 				#Find the IP address here
 ip netns exec green dhclient eth0-g #Assigns ip address to the adapter eth0-g
 ip netns exec green ip a 			#Find the IP address here
 
-How to add second extra network interface on Ubuntu 18.04 VM on OpenStack
-https://askubuntu.com/questions/1167839/how-to-add-second-extra-network-interface-on-ubuntu-18-04-vm-on-openstack
-
-How to Add an Additional IP to Your Ubuntu 18.04 Server
-https://www.atlantic.net/vps-hosting/how-to-add-an-additional-ip-to-your-ubuntu-18-04-server/
-
-Google: can you add more than 1 ip address to different network same interface??
-
-Answers
-https://www.quora.com/Can-we-have-two-different-IP-address-for-single-interface-at-a-time
-https://www.quora.com/Can-a-single-network-interface-have-more-than-one-IP-address-associated-with-it
-https://www.quora.com/Can-a-computer-have-two-IP-addresses
-https://www.loadtestingtool.com/help/how-setup-ip.shtml
-https://serverfault.com/questions/312221/can-a-single-network-card-have-2-ip-addresses
-https://access.redhat.com/solutions/30564
-
-
 Preetams Helps
 Introduction to Linux interfaces for virtual networking
 https://developers.redhat.com/blog/2018/10/22/introduction-to-linux-interfaces-for-virtual-networking/
 
 Linux VETH Pair - Virtual Ethernet Pair
 https://www.youtube.com/watch?v=FUHyWfRNhTk
+
+IV) How to start 2 dockers and connect them using ovs-docker or ovs-vsct
+
+#Install openVSwitch
+sudo apt install openvswitch-switch
+
+#check whether ovs-docker is available in your /usr/bin if not then
+cd /usr/bin
+wget https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker
+chmod a+rwx ovs-docker
+
+#Creating an OVS Bridge
+sudo ovs-vsctl add-br ovs-br1
+sudo show ovs-vsctl show
+
+# Giving your bridge ip address
+sudo ifconfig ovs-br1 173.16.1.1 netmask 255.255.255.0 up
+
+#Starting ubuntu docker containers to act as hosts
+#To have control over the network interfaces add --privileged 
+#We opted for ubuntu:14.04 even when 18.04 and 20.04 are available because 14.04 have ifconfig and ip package installed.
+sudo docker run -it --privileged --name container1 ubuntu:14.04 bash
+sudo docker run -it --privileged --name container2 ubuntu:14.04 bash
+
+#Checking the network interfaces in host containers to see that there will be just lo and eth0
+# here eth0 or the interface with ifindex=2 is very important as if you take it down then there wont be any further communication between your docker and outside world and you have to stop the docker and start again. 
+# Even with eth0 active you will be able to ping to the other host. Once we have set up our bridge we can take it down
+
+#In container1
+ip link
+#In container2
+ip link
+
+#Connect OVS Bridge with the 2 host containers
+sudo ovs-docker add-port ovs-br1 eth1 container1 --ipaddress=173.16.1.2/24
+sudo ovs-docker add-port ovs-br1 eth1 container2 --ipaddress=173.16.1.3/24
+
+#Go to container 1 and see ip address to see eth1 there an
+# Now take down the eth0 to ensure there is no alternate path for our packet to reach other host container.
+#In container 1
+ip link set eth0 down
+#In container 2
+ip link set eth0 down
+
+#ping the other device to see it taking eth1 as the gateway
+#In container 1
+ping 173.16.1.3
+route
+#In container 2
+ping 173.16.1.2
+route
+

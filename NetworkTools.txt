@@ -18,6 +18,9 @@ Mac Address Finder : https://aruljohn.com/mac.pl
    
 4. ip address add 192.168.56.10/24 dev enp0s8
 	Add a new ip address to your device enp0s8
+	
+5. ip address del 192.168.56.10/24 dev enp0s8
+	Delete just the ip address of enp0s8 and not the interface itself.
 
 5. ip link 
    ip link show

@@ -60,7 +60,17 @@ TRex QA
 7. Is it necessary to have 2 ports veth0 and veth1? or veth2 and veth3 in the configuration file? 
 	No we can replace one of the interface with dummy and still the statless udp packet transmission will work
 	
-
+8. What is the maximum Tx you get over a http communication over trex docker?
+	After deleting the low_end mode line in the configuration and checking the number of process available for the docker by 'grep processor /proc/cpuinfo | wc -l' to be 4. I ran the stateful command ' ./t-rex-64 -f cap2/http_simple.yaml -m 50000000 -d 100 -l 1000 -c 4'. The Total Tx Bw in port 1 became 4 Gbps.
+		So the answer is 4Gbps is the saturation for my dell 5755 in virtual box with 8 GB ram and 4 processor. 
+		
+9. Why do you need ipg(Inter Packet Gap) and rtt(Round Trip Time) in the YAML configuration file while running stateful mode of trex. Case in point cap2/dns.yaml. And why should ipg and rtt be same value?
+	In stateless mode the server do not wait for the packet to be received from the client. Even before that using the rtt value or ipg value the server sents back the answer. So we have to keep this value same?
+	
+10. How to fix pcap files that you record in Stateful mode? Shouldn't there be some corrections done for this to work?
+	Yes, you can see < https://trex-tgn.cisco.com/trex/doc/trex_appendix_fixing_pcaps.html#_large_packets >
+	Note that the packets in the pcap file should contain the request and the acknowledgment. An example < https://trex-tgn.cisco.com/trex/doc/trex_manual.html#_dns_basic_example >. The pcap file in cap2/dns.yaml contains just 2 packets. See for yourself in wireshark. 
+	
 ==========================TRex and Mininet====================================
 8. In normal condition when a host do not have trex running we usually receive packet on the h1-eth0 or hi-eth0 for some i. So tcpdump -nli h1-eth0 would give us the arriving packets. But on a host where TRex is installed it do not show packets received at this port. What changed? How to find which port is receiving it?
 	If a host has multiple interface connected to the switch (here 's1'), it will only chose one to receive and transmit. In our case where Trex is installed in a host there will be one or two veth port connected to the switch 's1' for TRex purpose and h1-eth0 that came with Mininet topology.  So using "trex> portattr" command figure out what is the mac address the destination ip provides using arp. Which will be resolved automatically. Check in your host "$: ip link" to see which device matches the mac address. Now run tcpdump -nli on that. An example answer is 

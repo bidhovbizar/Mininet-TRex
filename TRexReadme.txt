@@ -41,7 +41,16 @@ Materials
 
 13. Statless GUI Help				   
 	https://learningnetwork.cisco.com/s/question/0D53i00000U2p7sCAB/using-the-trex-stateless-gui-with-the-trex-node-in-cmlp-2
+
+14. Trex Configuration File YAML Help 
+	https://trex-tgn.cisco.com/trex/doc/trex_manual.html#trex_config_yaml_config_file
 	
+15. TRex PCAP captured fixing help
+	1. Low RTT due to fast capture can be fixed by increasing the RTT as we want or use centerize the capture point as 
+		response time of packet 1 from Server = time average of 2 consequtive sent packages from Client
+	2. File size about 1000kb should be trimmed
+	https://trex-tgn.cisco.com/trex/doc/trex_appendix_fixing_pcaps.html
+
 How To Install and run TRex
 1. Download ubuntu20.0 server (without the gui) and install it in your Oracle Virtual Box
 2. The screen resolution will be low for the CLI so install virtual box Ubuntu guest utilities by running the below command

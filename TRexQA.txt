@@ -60,7 +60,17 @@ TRex QA
 7. Is it necessary to have 2 ports veth0 and veth1? or veth2 and veth3 in the configuration file? 
 	No we can replace one of the interface with dummy and still the statless udp packet transmission will work
 	
-
+8. What is the maximum Tx you get over a http communication over trex docker?
+	After deleting the low_end mode line in the configuration and checking the number of process available for the docker by 'grep processor /proc/cpuinfo | wc -l' to be 4. I ran the stateful command ' ./t-rex-64 -f cap2/http_simple.yaml -m 50000000 -d 100 -l 1000 -c 4'. The Total Tx Bw in port 1 became 4 Gbps.
+		So the answer is 4Gbps is the saturation for my dell 5755 in virtual box with 8 GB ram and 4 processor. 
+		
+9. Why do you need ipg(Inter Packet Gap) and rtt(Round Trip Time) in the YAML configuration file while running stateful mode of trex. Case in point cap2/dns.yaml. And why should ipg and rtt be same value?
+	In stateless mode the server do not wait for the packet to be received from the client. Even before that using the rtt value or ipg value the server sents back the answer. So we have to keep this value same?
+	
+10. How to fix pcap files that you record in Stateful mode? Shouldn't there be some corrections done for this to work?
+	Yes, you can see < https://trex-tgn.cisco.com/trex/doc/trex_appendix_fixing_pcaps.html#_large_packets >
+	Note that the packets in the pcap file should contain the request and the acknowledgment. An example < https://trex-tgn.cisco.com/trex/doc/trex_manual.html#_dns_basic_example >. The pcap file in cap2/dns.yaml contains just 2 packets. See for yourself in wireshark. 
+	
 ==========================TRex and Mininet====================================
 8. In normal condition when a host do not have trex running we usually receive packet on the h1-eth0 or hi-eth0 for some i. So tcpdump -nli h1-eth0 would give us the arriving packets. But on a host where TRex is installed it do not show packets received at this port. What changed? How to find which port is receiving it?
 	If a host has multiple interface connected to the switch (here 's1'), it will only chose one to receive and transmit. In our case where Trex is installed in a host there will be one or two veth port connected to the switch 's1' for TRex purpose and h1-eth0 that came with Mininet topology.  So using "trex> portattr" command figure out what is the mac address the destination ip provides using arp. Which will be resolved automatically. Check in your host "$: ip link" to see which device matches the mac address. Now run tcpdump -nli on that. An example answer is 
@@ -86,4 +96,55 @@ TRex QA
 	No, it suppress those commands for some reasons I don't understand. An example of such instance is line 35,36,37 and 38 on setupH1MininetPart2.sh contains xterm command which are ignored but the same command when run in runMininet.py on line 34,37 and 39. It runs fine.
 	
 	Similarly the sleep function is also not ran in bash scrip using subprocess.call("file.sh", shell=True)
-	
+
+===========================Mininet: ASTF Client Server ===================================
+1. Why is my server not transmitting back to the client? I cross checked the traffic with 't' in server terminal.
+	There are a lot of reasons why this may happen. Let me present the setup that will work. 
+		1. Set up 2 ports with ip address 0.12 and .13 using /etc/trex_cfg2.yaml
+		2. Start trex-console in the same netns i.e if trex is in host1 then console should be in host1 too.
+		2. using 'service', do the following 
+			l3 -p0 --src 10.0.0.12 --dst 10.0.0.13
+			l3 -p1 --src 10.0.0.13 --dst 10.0.0.12
+			This is loopback configuration
+			NOTE: EXIT FROM SERVICE (service --off) OTHERWISE SERVER WONT TALK TO CLIENT
+		3. start -f astf/http_simple.py 
+		4. Look at the server screen press 't' to see the movement.
+		
+	Another case when it will work is the following but it will converge to loopback and not from host1 to host2
+		
+		TRex server is in host1(10.0.0.1) in astf mode ["/opt/trex2/v2.89/t-rex-64 -cfg /etc/trex_cfg2.yaml --astf"] and TRex client is run from host2(10.0.0.2) ["/opt/trex/v2.89/trex-console -i -s 10.0.0.12 -p 4611"]. If the ip address of veth2 and veth3 is 10.0.0.12 and 10.0.0.13
+		1. TRex should have the following command
+			l3 -p 0 --src 10.0.0.12 --dst 10.0.0.2
+			l3 -p 1 --src 10.0.0.13 --dst 10.0.0.2
+		2. trex-console shouln't be in service mode i.e. service --off
+		3. "route" in h1 should show the following
+			Destination 	Gateway		Genmask 		Flags Metric 	Ref	Use		Iface
+			10.0.0.0 		0.0.0.0		255.255.255.0 	U 		0 		0 	 0		veth2
+			10.0.0.0 		0.0.0.0		255.255.255.0 	U 		0 		0 	 0		veth3
+			10.0.0.0 		0.0.0.0		255.0.0.0 		U 		0 		0 	 0		h1-eth0
+			
+		   "route" in h2 should show the following
+			10.0.0.0 		0.0.0.0		255.0.0.0 		U 		0 		0 	 0		h2-eth0
+		4 "arp" in h1 should be the following
+		    Address 		HWtype 	Haddress 	Glags Mask 	Ifac
+			10.0.0.2 		ether 	xx:xx:xx	C			veth2
+			
+		   "arp" in h2 should show the following
+			10.0.0.10 		ether 	xx:xx:xx	C			h2-eth0
+			10.0.0.13		ether 	xx:xx:xx	C			h2-eth0
+			10.0.0.1 		ether 	xx:xx:xx	C			h2-eth0
+			10.0.0.12 		ether 	xx:xx:xx	C			h2-eth0
+			10.0.0.11 		      	(incomplete)			h2-eth0
+			10.0.0.3 		ether 	xx:xx:xx	C			h2-eth0
+		5. After sometime the trex-console will go offline after running the following command
+			trex> start -f astf/http_simple_1serverclient.py 
+			
+			Dont try to reconnect/ force reconnect to it. Just let it be.
+			
+		6. There are not tcpdump running on any host. 
+		7. Just run "wireshark &" on veth2 of host1. Because the trex packets are received not at h1-eth0 but at veth2. 
+		8. Press 't' in the server window and pray and wait for the server side to start talking. Probably after 5000 opackets from port 0 should trigger the port 1 communication.
+			
+2. Is there any thread on using 2 TRex in --astf --astf-server-only (server side) and --astf --ast-client-mask 1 (client side) alone.
+	Use this link as reference for help regarding client side trex and server side trex
+		https://groups.google.com/g/trex-tgn/c/PY6Dca5EisI

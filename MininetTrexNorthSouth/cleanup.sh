@@ -9,4 +9,3 @@ echo ""
 #Cleanup the Trex link and port to switch s1 which ensures it cleans up any previous veth ports
 echo "cleaning Trex in root namespace"
 bash ./cleanupTrexMininet.sh
-bash ./cleanupH1Mininet.sh

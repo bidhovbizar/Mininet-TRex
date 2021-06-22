@@ -56,7 +56,7 @@ Install Wireshark and run it in sudo and run `$ sudo wireshark &`. We will monit
 To start the experiment just run the following code in sudo or sudo -i.
 This bash script contains code to start Mininet topology (3 Host, 1 switch), configuring TRex in H1 and H2  and connecting TRex to the swtich s1 from root namespace and finally cleaning up the whole setup.
 ```
-$ ./runTrexMininet.sh`
+$ ./runTrexMininet.sh
 ```
 
 If you dont have permission follow this code
@@ -71,23 +71,29 @@ $ ./runTrexMininet.sh
 Try to ensure connectivity within the network by `mininet> pingall`. If there is a connectivity issue then just close it and restart again. Usually this works. 
 
 Our code is meant to run Trex1 in H1 as client and Trex2 in H2 as server. Once the setup is ready then go to the trex-console and run the following in the same order. Server should run first only then client should start.
+In  trex2-console
 ```
-trex2-console
 trex> portattr
-
-trex1-console
+```
+In trex1-console
+```
 trex> portattr
 ```
 
 Now you start the wireshark and observe eth0 port.  
 Check whether the address is resolved and you see the mac address. Then you start the server first and then client.
-```
-trex2-console
-trex> start -f astf/my_http_simple.py
+In trex2-console
 
-trex1-console
+```
 trex> start -f astf/my_http_simple.py
 ```
+
+
+In trex1-console
+```
+trex> start -f astf/my_http_simple.py
+```
+
 Now observe wireshark!
 Note: Its expected to see so many RST in wireshark.
 

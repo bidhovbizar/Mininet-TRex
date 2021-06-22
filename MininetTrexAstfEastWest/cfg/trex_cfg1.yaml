@@ -1,0 +1,15 @@
+- port_limit      : 2
+  version         : 2
+#List of interfaces. Change to suit your setup. Use ./dpdk_setup_ports.py -s to see available options
+  interfaces    : ["veth0","dummy"] 
+  #stack         : linux_based 
+  low_end       : true
+  prefix: instance1
+  zmq_pub_port: 4600
+  zmq_rpc_port: 4601
+  port_info       :  # Port IPs. Change to suit your needs. In case of loopback, you can leave as is.
+          - ip         : 10.0.0.10
+            default_gw : 10.0.0.100
+            #          - ip         : 10.0.0.11
+            #            default_gw : 10.0.0.12
+

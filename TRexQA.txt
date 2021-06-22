@@ -97,6 +97,8 @@ TRex QA
 	
 	Similarly the sleep function is also not ran in bash scrip using subprocess.call("file.sh", shell=True)
 
+13. Sometimes pingall doesn't work and some host become unreachable? why?
+	This is seen in MininetTrexAstfEastWest and I don't know, this problems seems to go away when I stop the whole network and restart it. So always pingall again if you find the network is broken. 
 ===========================Mininet: ASTF Client Server ===================================
 1. Why is my server not transmitting back to the client? I cross checked the traffic with 't' in server terminal.
 	There are a lot of reasons why this may happen. Let me present the setup that will work. 
@@ -112,7 +114,7 @@ TRex QA
 		
 	Another case when it will work is the following but it will converge to loopback and not from host1 to host2
 		
-		TRex server is in host1(10.0.0.1) in astf mode ["/opt/trex2/v2.89/t-rex-64 -cfg /etc/trex_cfg2.yaml --astf"] and TRex client is run from host2(10.0.0.2) ["/opt/trex/v2.89/trex-console -i -s 10.0.0.12 -p 4611"]. If the ip address of veth2 and veth3 is 10.0.0.12 and 10.0.0.13
+		TRex server is in host1(10.0.0.1) in astf mode ["/opt/trex2/v2.89/t-rex-64 -cfg /etc/trex_cfg2.yaml --astf"] and TRex client is run from host2(10.0.0.2) ["/opt/trex2/v2.89/trex-console -i -s 10.0.0.12 -p 4611"]. If the ip address of veth2 and veth3 is 10.0.0.12 and 10.0.0.13
 		1. TRex should have the following command
 			l3 -p 0 --src 10.0.0.12 --dst 10.0.0.2
 			l3 -p 1 --src 10.0.0.13 --dst 10.0.0.2
@@ -148,3 +150,5 @@ TRex QA
 2. Is there any thread on using 2 TRex in --astf --astf-server-only (server side) and --astf --ast-client-mask 1 (client side) alone.
 	Use this link as reference for help regarding client side trex and server side trex
 		https://groups.google.com/g/trex-tgn/c/PY6Dca5EisI
+		https://groups.google.com/g/trex-tgn/c/jiEhkjYRsHE/m/GdzuQKpSAQAJ
+		https://groups.google.com/g/trex-tgn/search?q=separate%20machine

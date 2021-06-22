@@ -22,11 +22,11 @@ def simpleTest():
     net.start()
 
     print(" Setting s1 in L3 mode")
-    subprocess.call("ifconfig s1 10.0.0.100 up", shell=True)
-    subprocess.call("ovs-ofctl add-flow s1 ip,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
-    subprocess.call("ovs-ofctl add-flow s1 arp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
-    subprocess.call("ovs-ofctl add-flow s1 tcp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
-    subprocess.call("ovs-ofctl add-flow s1 icmp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
+    #subprocess.call("ifconfig s1 10.0.0.100 up", shell=True)
+    #subprocess.call("ovs-ofctl add-flow s1 ip,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
+    #subprocess.call("ovs-ofctl add-flow s1 arp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
+    #subprocess.call("ovs-ofctl add-flow s1 tcp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
+    #subprocess.call("ovs-ofctl add-flow s1 icmp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
     
     subprocess.call("ovs-ofctl add-flow s1 ip,nw_src=10.0.0.13,nw_dst=10.0.0.10,actions=normal", shell=True)
     subprocess.call("ovs-ofctl add-flow s1 arp,nw_src=10.0.0.13,nw_dst=10.0.0.10,actions=normal", shell=True)

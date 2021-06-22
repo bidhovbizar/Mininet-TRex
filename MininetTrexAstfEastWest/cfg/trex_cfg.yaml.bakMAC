@@ -1,0 +1,9 @@
+- port_limit      : 2
+  version         : 2
+#List of interfaces. Change to suit your setup. Use ./dpdk_setup_ports.py -s to see available options
+  interfaces    : ["veth0-d","veth1-d"] 
+  port_info       :  # Port IPs. Change to suit your needs. In case of loopback, you can leave as is.
+          - dest_mac: 9a:b7:7f:1c:dc:b9
+            src_mac: 92:69:5b:c4:5d:e3
+          - dest_mac: 0e:e5:27:39:01:c7
+            src_mac: 06:8e:29:0b:9e:1f

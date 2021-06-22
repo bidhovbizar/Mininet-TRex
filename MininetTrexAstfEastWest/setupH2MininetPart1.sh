@@ -5,15 +5,15 @@
 #
 #			Part 1
 #Connect 2 veth pair to switch s1 in mininet
-ip link add veth2 type veth peer name eth2
+#ip link add veth2 type veth peer name eth2
 ip link add veth3 type veth peer name eth3
-ip link set eth2 netns 1
+#ip link set eth2 netns 1
 ip link set eth3 netns 1
-ovs-vsctl add-port s1 eth2
+#ovs-vsctl add-port s1 eth2
 ovs-vsctl add-port s1 eth3
-ip address add 10.0.0.12/24 dev veth2
+#ip address add 10.0.0.12/24 dev veth2
 ip address add 10.0.0.13/24 dev veth3
-ip link set veth2 up
+#ip link set veth2 up
 ip link set veth3 up
 
 #			End of Part 1 

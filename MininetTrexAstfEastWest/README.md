@@ -81,13 +81,11 @@ trex> portattr
 ```
 
 Now you start the wireshark and observe eth0 port.  
-Check whether the address is resolved and you see the mac address. Then you start the server first and then client.
-In trex2-console
-
+Check whether the address is resolved and you see the mac address. Then you start the server first and then client. 
+In trex2-console 
 ```
 trex> start -f astf/my_http_simple.py
 ```
-
 
 In trex1-console
 ```

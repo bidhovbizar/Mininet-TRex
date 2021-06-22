@@ -32,7 +32,7 @@ ovs-vsctl show
 echo ""
 cd ./trex2/v2.89/
 #Run the Trex Server in on xterm and Trex console/client in another console
-xterm -T "h2 Server" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i --astf-server-only &
+xterm -T "h2 Server" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i --astf --astf-server-only &
 sleep 5 
 echo 'Trex2 Server started'
 xterm -hold -T "h2 Client/console" -e ./trex-console -f -s 10.0.0.2 -p 4611 &

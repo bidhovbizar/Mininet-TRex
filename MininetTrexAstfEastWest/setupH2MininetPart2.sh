@@ -32,7 +32,9 @@ ovs-vsctl show
 echo ""
 cd ./trex2/v2.89/
 #Run the Trex Server in on xterm and Trex console/client in another console
-xterm -T "h2 Client" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i --astf &
+# Note that even without the --ast-client-mask 0x01 the code works
+#xterm -T "h2 Client" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i --astf &
+xterm -T "h2 Client" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i --astf --astf-client-mask 0x1 &
 sleep 5 
 echo 'Trex2 Server started'
 xterm -hold -T "h2 Client/console" -e ./trex-console -f -s 10.0.0.2 -p 4611 &

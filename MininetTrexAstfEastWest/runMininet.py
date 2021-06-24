@@ -22,11 +22,6 @@ def simpleTest():
     net.start()
 
     print(" Setting s1 in L3 mode")
-    #subprocess.call("ifconfig s1 10.0.0.100 up", shell=True)
-    #subprocess.call("ovs-ofctl add-flow s1 ip,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
-    #subprocess.call("ovs-ofctl add-flow s1 arp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
-    #subprocess.call("ovs-ofctl add-flow s1 tcp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
-    #subprocess.call("ovs-ofctl add-flow s1 icmp,nw_src=10.0.0.10,nw_dst=10.0.0.13,actions=normal", shell=True)
     
     subprocess.call("ovs-ofctl add-flow s1 ip,nw_src=10.0.0.13,nw_dst=10.0.0.10,actions=normal", shell=True)
     subprocess.call("ovs-ofctl add-flow s1 arp,nw_src=10.0.0.13,nw_dst=10.0.0.10,actions=normal", shell=True)
@@ -54,8 +49,8 @@ def simpleTest():
     #Start the tcpdump for host h1,h2 and h3
     print("\nStarting tcpdump on all the host")
     h1.cmd("xterm -hold -T 'tcpdump H1 veth0' -e tcpdump -nli veth0 &", shell=True)
-    h1.cmd("xterm -hold -T 'tcpdump H1 veth1' -e tcpdump -nli veth1 &", shell=True)
-    h2.cmd("xterm -hold -T 'tcpdump H2 veth2' -e tcpdump -nli veth2 &", shell=True)
+    #h1.cmd("xterm -hold -T 'tcpdump H1 veth1' -e tcpdump -nli veth1 &", shell=True)
+    #h2.cmd("xterm -hold -T 'tcpdump H2 veth2' -e tcpdump -nli veth2 &", shell=True)
     h2.cmd("xterm -hold -T 'tcpdump H2 veth3' -e tcpdump -nli veth3 &", shell=True)
     
     print( "Dumping host connections" )

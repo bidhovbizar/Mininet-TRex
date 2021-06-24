@@ -32,9 +32,11 @@ ovs-vsctl show
 echo ""
 cd ./trex1/v2.89/
 #Run the Trex Server in on xterm and Trex console/client in another console
-xterm -T "h1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg1.yaml -i --astf --astf-server-only &
+# The following command also works i.e astf without --ast-server-only. 
+#xterm -T "H1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg1.yaml -i --astf &
+xterm -T "H1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg1.yaml -i --astf --astf-server-only &
 sleep 5 
 echo 'Trex1 Server started'
-xterm -hold -T "h1 Client/console" -e ./trex-console -f -s 10.0.0.1 -p 4601 &
+xterm -hold -T "H1 Server Console" -e ./trex-console -f -s 10.0.0.1 -p 4601 &
 echo
 #echo "The TRex2 will be deleted when Mininet closes"

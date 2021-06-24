@@ -92,8 +92,8 @@ In trex1-console
 trex> start -f astf/my_http_simple.py
 ```
 
-Now observe wireshark!
-Note: Its expected to see so many RST in wireshark.
+Now observe wireshark! And Enjoy!
+Cauvet: If you see so many RST packet coming from the server in wireshark. This means all your connections are good but you have to swap your interfaces ["dummy", "veth0"] to ["veth0", "dummy"] and the corresponding IP address and Gateway.
 
 ## Explanation
 The following is the sequence of running files and the sequence to run this is important.
@@ -140,4 +140,3 @@ Note: Some of the commands in the file is commented because the same script is c
 
 `$ ./cleanupH2Mininet.sh`
 	Removes all the links and connection made to setup the TRex server within h1. But this isn't called in cleanup as this needs to be run inside mininet to remove connection.
-

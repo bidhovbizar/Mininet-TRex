@@ -155,3 +155,23 @@ TRex QA
 		https://groups.google.com/g/trex-tgn/c/-CewQaVF6Cw/m/mfRx-Y8TCgAJ
 		https://groups.google.com/g/trex-tgn/c/OT2sbfBSYWs/m/nmQz_Ie_BwAJ
 		https://groups.google.com/g/trex-tgn/c/7aYO5rrnx7o
+		
+3. Will ASTF with client and server on different machine work?
+	Yes it will work. These are the conditions required for the same. 
+	1. Your TRex should work with just 1 interface. The other should be dummy as follows:
+		interfaces: ["dummy", "veth0"]
+		and
+		interfaces: ["veth3", "dummy"]
+	2. Make sure when you test out the code you don't add --astf-server-only or --astf-client-mask 0x1 on the wrong server. 
+	
+4. If you see server returning RST on your wireshark. What should we do to solve it?
+	If your wireshark shows your source, dest is fine and your 'trex> portattr' shows the ip address is resolved and in L3 mode. Then that means you should have swapped your interfaces from ["dummy", "veth0"] to ["veth0", "dummy"] on your server and client. And change the order of 
+	(ip1,default_gateway1)
+	(ip2,default_gateway2)
+	
+	to 
+	
+	(ip2,default_gateway2)
+	(ip1,default_gateway1)
+	
+Use this help: https://github.com/bidhovbizar/Mininet-TRex/tree/main/MininetTrexAstfEastWest

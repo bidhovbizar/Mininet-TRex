@@ -14,7 +14,15 @@ Materials
 	
 5. TRex Stateless Documentation
 	https://trex-tgn.cisco.com/trex/doc/trex_stateless.html#_getting_started_tutorials
-
+		Use this link as reference for help regarding client side trex and server side trex
+		https://groups.google.com/g/trex-tgn/c/jiEhkjYRsHE/m/GdzuQKpSAQAJ
+		https://groups.google.com/g/trex-tgn/c/PY6Dca5EisI
+		https://groups.google.com/g/trex-tgn/search?q=separate%20machine
+		https://groups.google.com/g/trex-tgn/c/-CewQaVF6Cw/m/mfRx-Y8TCgAJ
+		https://groups.google.com/g/trex-tgn/c/OT2sbfBSYWs/m/nmQz_Ie_BwAJ
+		https://groups.google.com/g/trex-tgn/c/7aYO5rrnx7o
+	
+	
 6. Tutorial is available at
 	CISCO LIVE: https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2017/pdf/DEVNET-2568.pdf   | page 19
   	Random Guy: https://tawmio.com/2019/07/08/trex-ciscos-stateful-stateless-traffic-generator/

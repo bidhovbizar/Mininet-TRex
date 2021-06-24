@@ -149,6 +149,9 @@ TRex QA
 			
 2. Is there any thread on using 2 TRex in --astf --astf-server-only (server side) and --astf --ast-client-mask 1 (client side) alone.
 	Use this link as reference for help regarding client side trex and server side trex
-		https://groups.google.com/g/trex-tgn/c/PY6Dca5EisI
 		https://groups.google.com/g/trex-tgn/c/jiEhkjYRsHE/m/GdzuQKpSAQAJ
+		https://groups.google.com/g/trex-tgn/c/PY6Dca5EisI
 		https://groups.google.com/g/trex-tgn/search?q=separate%20machine
+		https://groups.google.com/g/trex-tgn/c/-CewQaVF6Cw/m/mfRx-Y8TCgAJ
+		https://groups.google.com/g/trex-tgn/c/OT2sbfBSYWs/m/nmQz_Ie_BwAJ
+		https://groups.google.com/g/trex-tgn/c/7aYO5rrnx7o

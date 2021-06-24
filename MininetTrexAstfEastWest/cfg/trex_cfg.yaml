@@ -1,9 +1,10 @@
-- port_limit      : 2
-  version         : 2
-#List of interfaces. Change to suit your setup. Use ./dpdk_setup_ports.py -s to see available options
-  interfaces    : ["veth0","veth1"] 
-  port_info       :  # Port IPs. Change to suit your needs. In case of loopback, you can leave as is.
-          - dest_mac: ea:80:79:bc:be:63
-            src_mac: fe:25:bf:e7:3d:c8 
-          - dest_mac: 6e:c9:fa:c5:54:0c
-            src_mac: 5e:2c:13:a1:3d:37
+- port_limit    : 2
+  version       : 2
+  low_end       : true
+  interfaces    : ["veth0", "veth1"]   # list of the interfaces to bind run ./dpdk_nic_bind.py --status
+  port_info     :  # set eh mac addr
+
+                 - ip         : 1.1.1.1
+                   default_gw : 2.2.2.2
+                 - ip         : 2.2.2.2
+                   default_gw : 1.1.1.1 

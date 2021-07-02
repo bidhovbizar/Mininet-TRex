@@ -59,6 +59,10 @@ Materials
 	2. File size about 1000kb should be trimmed
 	https://trex-tgn.cisco.com/trex/doc/trex_appendix_fixing_pcaps.html
 
+16. How to Log in Trex
+	help1: https://trex-tgn.cisco.com/trex/doc/trex_rpc_server_spec.html
+	help2: https://github.com/cisco-system-traffic-generator/trex-core/issues/306
+	
 How To Install and run TRex
 1. Download ubuntu20.0 server (without the gui) and install it in your Oracle Virtual Box
 2. The screen resolution will be low for the CLI so install virtual box Ubuntu guest utilities by running the below command

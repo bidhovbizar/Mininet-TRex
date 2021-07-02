@@ -175,3 +175,29 @@ TRex QA
 	(ip1,default_gateway1)
 	
 Use this help: https://github.com/bidhovbizar/Mininet-TRex/tree/main/MininetTrexAstfEastWest
+
+==========================================Questions that needs to be answered===========================================
+
+1. Learn how to mix astf profiles together by going through astf/*.py
+2. Start with https/ http benchmark test from MAWI and try to segregate them per session. (automate if possible) 
+3. Check what is the maximum rate at which new pcap files move and fill the chart:
+	
+					raw 				altered1				altered2 				altered3
+		1 pcap  (sat., multipier)	(sat., multipier)		(sat., multipier) 		(sat., multipier)
+		2 pcap	(sat., multipier)	(sat., multipier)		(sat., multipier)		(sat., multipier)
+altered1: All packets are of same size 64KB 
+altered2: All packets are of same size 100KB
+altered3: Time stamps are changed 
+
+In Parallel 
+1. Check how to create timeseries of data.
+	a. Question asked in TREX how to enable logging in trex. 
+	b. How we can establish rpc connection and retrieve data accordingly. Use https://trex-tgn.cisco.com/trex/doc/trex_rpc_server_spec.html 
+	c. Ask gaurav or preetam to find out softwares for rpc collectors to plot data. | What is indulxdb and how can it be used to store telemtry data 
+	d. See trex-console file to understand how the rpc connection is made and data is published. 
+	e. See what is netdata and is it useful for us. Use https://github.com/netdata/netdata
+In Parallel 
+1. See what are the test cases in IXIA for cisco testbed. 
+
+In Parallel 
+1. What are the benchmark tests in /trex/doc/ page. Explore

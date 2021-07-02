@@ -68,7 +68,16 @@ $ chmod u+x *.sh
 $ ./runTrexMininet.sh
 ```
 
-Try to ensure connectivity within the network by `mininet> pingall`. If there is a connectivity issue then just close it and restart again. Usually this works. 
+To ensure the TUI console with Trex server comes up due to the min resolution 111 by 45. We have to change the `~/.Xresources` file.  
+Add the following to the ~/.Xresources file
+```
+xterm*background: black
+xterm*foreground: lightgray
+xterm*allowWindowOps: true
+```
+And run `xrdb ~/.Xresources` to load them to the xterm. This will ensure the `resize` command works.  
+
+Try to ensure connectivity within the network by `mininet> pingall`. If there is a connectivity issue then just close the terminal completely and redo the steps again. Usually this works. `pingall` during the first running will have H1 -> X H2. This is expected only during second we have to worry.
 
 Our code is meant to run Trex1 in H1 as client and Trex2 in H2 as server. Once the setup is ready then go to the trex-console and run the following in the same order. Server should run first only then client should start.
 In  trex2-console

@@ -35,8 +35,14 @@ cd ./trex1/v2.89/
 # The following command also works i.e astf without --ast-server-only. 
 #xterm -T "H1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg1.yaml -i --astf &
 xterm -T "H1 Server" -e ./t-rex-64 --cfg /etc/trex_cfg1.yaml -i --astf --astf-server-only &
-sleep 5 
+sleep 5
 echo 'Trex1 Server started'
 xterm -hold -T "H1 Server Console" -e ./trex-console -f -s 10.0.0.1 -p 4601 &
+sleep 2
 echo
+# The resize option will only work is you have done the following
+# echo "xterm*allowWindowOps: true" >> ~/.Xresources
+# xdrb ~/.Xresources
+
+xterm -hold -T "H1 Server Console TUI" -e 'resize -s 200 200;./trex-console -f -s 10.0.0.1 -p 4601 --tui' &
 #echo "The TRex2 will be deleted when Mininet closes"

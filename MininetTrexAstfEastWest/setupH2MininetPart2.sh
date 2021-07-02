@@ -38,5 +38,11 @@ xterm -T "H2 Client" -e ./t-rex-64 --cfg /etc/trex_cfg2.yaml -i --astf --astf-cl
 sleep 5 
 echo 'Trex2 Server started'
 xterm -hold -T "H2 Client console" -e ./trex-console -f -s 10.0.0.2 -p 4611 &
+sleep 2
 echo
+# The resize option will only work is you have done the following
+# echo "xterm*allowWindowOps: true" >> ~/.Xresources
+# xdrb ~/.Xresources
+
+xterm -hold -T "H2 Client console TUI" -e 'resize -s 200 200;./trex-console -f -s 10.0.0.2 -p 4611 --tui' &
 #echo "The TRex2 will be deleted when Mininet closes"

@@ -63,6 +63,15 @@ Materials
 	help1: https://trex-tgn.cisco.com/trex/doc/trex_rpc_server_spec.html
 	help2: https://github.com/cisco-system-traffic-generator/trex-core/issues/306
 	
+17. Trex API
+	Go to 'Python Automation API': https://trex-tgn.cisco.com/trex/doc/
+	Tutorial1: https://trex-tgn.cisco.com/trex/doc/trex_control_plane_peek.html
+	Tutorial2: https://trex-tgn.cisco.com/trex/doc/trex_control_plane_design_phase1.html
+	API Documentation: https://trex-tgn.cisco.com/trex/doc/cp_docs/index.html
+	Stateless Python API: https://trex-tgn.cisco.com/trex/doc/cp_stl_docs/index.html
+	ASTF Client Module: https://trex-tgn.cisco.com/trex/doc/cp_astf_docs/api/client_code.html
+	
+	
 How To Install and run TRex
 1. Download ubuntu20.0 server (without the gui) and install it in your Oracle Virtual Box
 2. The screen resolution will be low for the CLI so install virtual box Ubuntu guest utilities by running the below command

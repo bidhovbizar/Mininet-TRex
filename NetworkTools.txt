@@ -157,6 +157,17 @@ Mac Address Finder : https://aruljohn.com/mac.pl
 	Note: The ifindex of devices can be seen using the following:
 		cat /sys/class/net/enp0s3/ifindex
 		
+29. iptable
+	Used to create firewall. It can drop or add packets as per requirement. Didn't use it till now. 
+	help: https://www.geeksforgeeks.org/iptables-command-in-linux-with-examples/
+	
+30. anydump.sh
+	Tcpdump just shows the output without mentioning the interface in which the packet is received. 
+	The code by Sebastian Haas append the interface name with the packet. 
+	help1: https://sebastianhaas.de/anydump-release/ 
+	Its a bash script copy it from his blog and paste it in any editor and run it like tcpdump.
+	help1: https://serverfault.com/questions/224698/how-to-display-interface-in-tcpdump-output-flow
+	
 I) How to create Network NamespaceLinux VETH Pair - Virtual Ethernet Pair
 
 ip link 	# Shows existing network device configuration

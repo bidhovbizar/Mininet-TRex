@@ -77,6 +77,8 @@ xterm*allowWindowOps: true
 ```
 And run `xrdb ~/.Xresources` to load them to the xterm. This will ensure the `resize` command works.  
 
+Its safe to copy `xrd ~/.Xresources` to `.bash_profile`. Run `sudo echo 'xrdb ~/.Xresources' >> ~/.bash_profile` assuming that you are running Trex on root.
+ 
 Try to ensure connectivity within the network by `mininet> pingall`. If there is a connectivity issue then just close the terminal completely and redo the steps again. Usually this works. `pingall` during the first running will have H1 -> X H2. This is expected only during second we have to worry.
 
 Our code is meant to run Trex1 in H1 as client and Trex2 in H2 as server. Once the setup is ready then go to the trex-console and run the following in the same order. Server should run first only then client should start.
